@@ -286,9 +286,10 @@ class HoneyPotInteractiveProtocol(HoneyPotBaseProtocol, recvline.HistoricRecvLin
             pass
 
     def displayLastLogin(self):
-        # Show last login info after motd (can be fake or real)
+        # Show last login info after motd
+        # TODO: can be fake or real; get from logs?
         if CONFIG.has_option('shell', 'show_last_login'):
-            if CONFIG.get('shell', 'show_last_login') == 'true':
+            if CONFIG.getboolean('shell', 'show_last_login',fallback=False):
                 ip = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
                 date_now = datetime.now() - timedelta(days=random.randrange(1, 15),
                                                       minutes=random.randrange(0, 60),
