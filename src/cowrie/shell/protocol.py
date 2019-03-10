@@ -282,7 +282,7 @@ class HoneyPotInteractiveProtocol(HoneyPotBaseProtocol, recvline.HistoricRecvLin
     def displayMOTD(self):
         try:
             self.terminal.write(self.fs.file_contents('/etc/motd'))
-        except Exception as ex:
+        except Exception:
             pass
 
     def displayLastLogin(self):
