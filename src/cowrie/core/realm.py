@@ -41,13 +41,16 @@ from cowrie.proxy import server as proxyserver
 from cowrie.shell import avatar as shellavatar
 from cowrie.shell import server as shellserver
 from cowrie.telnet import session
-
+from cowrie.others import platform
 
 @implementer(twisted.cred.portal.IRealm)
 class HoneyPotRealm(object):
 
     def __init__(self):
-        pass
+        """
+        Load here so we can do it only once
+        """
+        self.platform = platform.Factory()
 
     def requestAvatar(self, avatarId, mind, *interfaces):
         backend = CONFIG.get('honeypot', 'backend', fallback='shell')
