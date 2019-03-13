@@ -9,11 +9,13 @@ from cowrie.core.config import CONFIG
 
 class Factory(object):
     def __init__(self):
-        self.cpu = self.get_cpu()
         self.cpu_vnd_id = 6  # todo from config
         self.cpu_model_id = 63  # todo from config
+        self.cpu = self.get_cpu()
+
         self.set_cpu_size(1, 6)  # todo from config
         self.set_cpu_hyper("None")  # todo from config
+        self.create_proc_cpuinfo()
 
     def get_cpu(self):
         cpu = {}
@@ -22,7 +24,7 @@ class Factory(object):
                     "Stepping", "CPU MHz", "BogoMIPS", "Hypervisor vendor", "Virtualization type", "L1d cache",
                     "L1i cache", "L2 cache", "L3 cache", "NUMA node0 CPU(s)", "Flags", "stepping", "apicid",
                     "initial apicid", "fpu", "fpu_exception", "cpuid level", "wp", "bugs", "clflush size",
-                    "cache_alignment", "address sizes", "power management "]
+                    "cache_alignment", "address sizes", "power management","microcode"]
         try:
             cpu_file = 'cpu-{0}-{1}'.format(self.cpu_vnd_id, self.cpu_model_id)
             with open(CONFIG.get('honeypot', 'share_path') + '/arch/hwd/' + cpu_file) as fp:
@@ -52,9 +54,9 @@ class Factory(object):
             self.cpu['Hypervisor vendor'] = "None"
 
     def create_proc_cpuinfo(self):
-        cpuinfo_vars = []
+        cpuinfo_vars = {}
         proc_cpuinfo_putput = [["processor", None], ["vendor_id", "Vendor ID"], ["cpu family", "CPU family"],
-                               ["model", "Model"], ["model name", "Model name"], ["stepping", "stepping"],
+                               ["model", "Model"], ["model name", "Model name"], ["stepping", "Stepping"],
                                ["microcode", "microcode"], ["cpu MHz", "CPU MHz"], ["cache size", "L3 cache"],
                                ["physical id", None], ["siblings", None], ["core id", None],
                                ["cpu cores", "Core(s) per socket"], ["apicid", None], ["initial apicid", None],
@@ -63,16 +65,22 @@ class Factory(object):
                                ["clflush size", "clflush size"], ["cache_alignment", "cache_alignment"],
                                ["address sizes", "address sizes"], ["power management", "power management"]]
 
-        for cpu in range(self.cpu['Socket(s)']):
-            for core in range(self.cpu['Core(s) per socket']):
-                cpuinfo_vars['processor'] = cpu * core + core
-                cpuinfo_vars['physical id'] = cpu
-                cpuinfo_vars['siblings'] = self.cpu['Core(s) per socket']
-                cpuinfo_vars['core id'] = cpuinfo_vars['processor']
-                cpuinfo_vars['apicid'] = cpuinfo_vars['processor']
-                cpuinfo_vars['initial apicid'] = cpuinfo_vars['processor']
+        with open(CONFIG.get('honeypot', 'contents_path') + '/proc/cpuinfo',"w") as fp:
+            for cpu in range(self.cpu['Socket(s)']):
+                for core in range(self.cpu['Core(s) per socket']):
+                    cpuinfo_vars['processor'] = cpu * core + core
+                    cpuinfo_vars['physical id'] = cpu
+                    cpuinfo_vars['siblings'] = self.cpu['Core(s) per socket']
+                    cpuinfo_vars['core id'] = cpuinfo_vars['processor']
+                    cpuinfo_vars['apicid'] = cpuinfo_vars['processor']
+                    cpuinfo_vars['initial apicid'] = cpuinfo_vars['processor']
 
-                for k, v in proc_cpuinfo_putput:
-                    if v is None:
-                        v = cpuinfo_vars[k]
-                    line = '{0: <16}{1}\n'.format(k, v)
+
+                    for k, v in proc_cpuinfo_putput:
+                        if v is None:
+                            vl = cpuinfo_vars[k]
+                        else:
+                            vl = self.cpu[v]
+                        line = '{0: <16}: {1}\n'.format(k, vl)
+                        fp.write(line)
+                    fp.write("\n")

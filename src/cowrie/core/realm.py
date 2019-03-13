@@ -41,7 +41,7 @@ from cowrie.proxy import server as proxyserver
 from cowrie.shell import avatar as shellavatar
 from cowrie.shell import server as shellserver
 from cowrie.telnet import session
-from cowrie.others import platform
+from cowrie.shell import platform
 
 @implementer(twisted.cred.portal.IRealm)
 class HoneyPotRealm(object):
