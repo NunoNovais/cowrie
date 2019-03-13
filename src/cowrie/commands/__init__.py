@@ -26,6 +26,7 @@ __all__ = [
     'nc',
     'netstat',
     'nohup',
+    'nproc',
     'ping',
     'scp',
     'service',

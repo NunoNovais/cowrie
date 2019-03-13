@@ -62,7 +62,7 @@ class command_lscpu(HoneyPotCommand):
     def start(self):
         try:
             opts, args = getopt.getopt(self.args, 'abcJepe:p:s:xyhV',
-                                       ['all', 'online', 'offline', 'json', 'extended', 'parse', 'sysroot', 'hex',
+                                       ['all', 'online', 'offline', 'json', 'extended=', 'parse=', 'sysroot', 'hex',
                                         'physical', 'help', 'version'])
         except getopt.GetoptError as err:
             self.write("lscpu: invalid option -- \'{0}\'\n".format(err.opt))
@@ -74,6 +74,10 @@ class command_lscpu(HoneyPotCommand):
         if len(opts):
             if set(only_opts).issubset(set(['-h', '--help'])):
                 self.help()
+                self.exit()
+                return
+            elif set(only_opts).issubset(set(['-V', '--version'])):
+                self.write("lscpu from util-linux 2.32\n")
                 self.exit()
                 return
             elif set(only_opts).issubset(set(['-a', '--all', '-b', '--online'])) and not set(only_opts).issubset(
