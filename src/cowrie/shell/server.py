@@ -54,7 +54,7 @@ class CowrieServer(object):
 
     def __init__(self, realm):
         self.hostname = CONFIG.get('honeypot', 'hostname')
-
+        self.realm = realm
         try:
             arches = [arch.strip() for arch in CONFIG.get('shell', 'arch').split(',')]
             self.arch = random.choice(arches)

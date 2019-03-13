@@ -121,6 +121,20 @@ backend = shell
 # savings time and other special cases yourself when analysing the logs.
 timezone = UTC
 
+# Information about virtual hardware emulated by Cowrie
+# This will be used for /proc/cpuinfo and lscpu
+# cpu_vnd_id        - See list of cpu available (default 6)
+# cpu_model_id      - See list of cpu available (default 6)
+# cpu_hypervisor    - See list of cpu available (default None)
+# cpu_sockets       - Number of CPU sockets (default 1)
+# cpu_cores         - Number od Cores per CPU (default 4)
+# mem_size          - Menory size installed (default 8192 MB - 8 Gb)
+cpu_vnd_id = 6
+cpu_model_id = 63
+cpu_hypervisor = None
+cpu_sockets = 1
+cpu_cores = 4
+mem_size = 8192
 
 # ============================================================================
 # Network Specific Options
