@@ -82,14 +82,14 @@ class command_lscpu(HoneyPotCommand):
                 return
             elif set(only_opts).issubset(set(['-a', '--all', '-b', '--online'])) and not set(only_opts).issubset(
                     set(['-e', '--extended', '-p', '--parse'])):
-                self.write(
-                    "lscpu: options --all, --online and --offline may only be used with options --extended or --parse.\n")
+                self.write("lscpu: options --all, --online and --offline " +
+                           "may only be used with options --extended or --parse.\n")
                 self.exit()
                 return
             elif set(only_opts).issubset(set(['-c', '--offline'])):
                 if not set(only_opts).issubset(set(['-e', '--extended', '-p', '--parse'])):
-                    self.write(
-                        "lscpu: options --all, --online and --offline may only be used with options --extended or --parse.\n")
+                    self.write("lscpu: options --all, --online and --offline " +
+                               "may only be used with options --extended or --parse.\n")
                 self.exit()
                 return
 
