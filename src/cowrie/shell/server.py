@@ -51,9 +51,9 @@ class CowrieServer(object):
     fs = None
     process = None
     avatars = []
-
+    hostname = CONFIG.get('honeypot', 'hostname')
+    
     def __init__(self, realm):
-        self.hostname = CONFIG.get('honeypot', 'hostname')
         self.realm = realm
         try:
             arches = [arch.strip() for arch in CONFIG.get('shell', 'arch').split(',')]
